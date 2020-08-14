@@ -6,6 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-css": "tailwind build src/tailwind.css -o src/index.css",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -13,15 +14,29 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
+    "react-avatar-editor": "^11.0.10",
+    "react-color": "^2.18.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^1.2.0",
+    "tailwindcss": "^1.6.2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
+    "@types/react-avatar-editor": "^10.3.5",
+    "@types/react-color": "^3.0.4",
     "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/uuid": "^8.3.0",
     "typescript": "~3.7.2"
   },
   "eslintConfig": {
