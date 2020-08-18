@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { Link, RouteChildrenProps, withRouter } from 'react-router-dom'
-import { useAuth } from 'reactfire/firebaseApp/sdk'
+import { useAuth, useFunctions } from 'reactfire/firebaseApp/sdk'
 import { Button, Form, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react'
 
 import { displayErrorInput, displayFormErrors, validateRegisterForm } from '../helpers/formHelper'
@@ -8,6 +8,7 @@ import { FormError } from '../types/Forms'
 
 function Register({ history }: RouteChildrenProps) {
   const auth = useAuth()
+  const saveNewUser = useFunctions().httpsCallable('saveNewUser')
 
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
@@ -39,6 +40,7 @@ function Register({ history }: RouteChildrenProps) {
     //  TODO use cloud function to save user details to firestore
     try {
       await auth.createUserWithEmailAndPassword(email, password)
+      saveNewUser({ email, username })
       history.push('/dashboard')
     } catch (error) {
       setRegisterFormErrors([error])
