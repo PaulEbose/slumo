@@ -36,7 +36,7 @@ function Login({ history }: RouteChildrenProps) {
       await auth.signInWithEmailAndPassword(email, password)
       history.push('/dashboard')
     } catch (error) {
-      setLoginFormErrors(error)
+      setLoginFormErrors([error])
     }
 
     setLoading(false)

@@ -1,6 +1,7 @@
+import md5 from 'md5'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { Link, RouteChildrenProps, withRouter } from 'react-router-dom'
-import { useAuth, useFunctions } from 'reactfire/firebaseApp/sdk'
+import { useAuth } from 'reactfire/firebaseApp/sdk'
 import { Button, Form, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react'
 
 import { displayErrorInput, displayFormErrors, validateRegisterForm } from '../helpers/formHelper'
@@ -8,7 +9,6 @@ import { FormError } from '../types/Forms'
 
 function Register({ history }: RouteChildrenProps) {
   const auth = useAuth()
-  const saveNewUser = useFunctions().httpsCallable('saveNewUser')
 
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
@@ -37,10 +37,12 @@ function Register({ history }: RouteChildrenProps) {
 
     setLoading(true)
 
-    //  TODO use cloud function to save user details to firestore
     try {
-      await auth.createUserWithEmailAndPassword(email, password)
-      saveNewUser({ email, username })
+      const createdUser = await auth.createUserWithEmailAndPassword(email, password)
+      createdUser.user?.updateProfile({
+        displayName: username,
+        photoURL: `https://gravatar.com/avatar/${md5(createdUser.user.email!)}?d=identicon`,
+      })
       history.push('/dashboard')
     } catch (error) {
       setRegisterFormErrors([error])
