@@ -4,7 +4,7 @@ import { Link, RouteChildrenProps, withRouter } from 'react-router-dom'
 import { useAuth } from 'reactfire/firebaseApp/sdk'
 import { Button, Form, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react'
 
-import { displayErrorInput, displayFormErrors, validateRegisterForm } from '../helpers/formHelper'
+import { displayErrorInput, displayFormErrors, validateRegisterForm } from '../helpers/form'
 import { FormError } from '../types/Forms'
 
 function Register({ history }: RouteChildrenProps) {

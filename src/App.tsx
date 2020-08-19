@@ -34,6 +34,7 @@ function App() {
 
           <PageWrapper>
             <Route exact path="/" component={Home} />
+
             <Route path="/login">
               <Suspense fallback={'Spinner...loading spinner'}>
                 <SiteHeader />
