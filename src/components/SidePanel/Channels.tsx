@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from 'react'
 import { User } from 'firebase'
 import { useUser } from 'reactfire'
 import { useFirestore } from 'reactfire/firebaseApp/sdk'
@@ -6,16 +6,29 @@ import { useFirestore } from 'reactfire/firebaseApp/sdk'
 import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
 import { checkFields } from '../../helpers/form'
 import { DisplayChannels } from '../../helpers/channel'
+import { IChannel } from '../../types/Channels'
+import { ChannelContext } from '../../contexts/Channel'
 
 function Channels() {
   const channelsCollection = useFirestore().collection('channels')
   const user = useUser<User>()
+  const [, setChannel] = useContext(ChannelContext)
 
   useEffect(() => {
     const unsubscribe = channelsCollection.onSnapshot((snapshot) => {
       const updates = snapshot.docChanges().map((channel) => ({ ...channel.doc.data(), id: channel.doc.id }))
 
       setChannels((c: any) => [...c, ...updates])
+
+      const firstChannel = channels[0]
+      const setActiveChannel = activeChannelState[1]
+
+      if (isFirstLoad && !!channels.length) {
+        setChannel!(firstChannel)
+        setActiveChannel(firstChannel.id)
+      }
+
+      setIsFirstLoad(false)
     })
 
     return () => {
@@ -25,8 +38,10 @@ function Channels() {
 
   const [channelName, setChannelName] = useState('')
   const [channelDetails, setChannelDetails] = useState('')
-  const [channels, setChannels] = useState<any>([])
+  const [channels, setChannels] = useState<IChannel[]>([])
   const [isModal, setIsModal] = useState(false)
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  const activeChannelState = useState<string | null>(null)
 
   const openModal = () => setIsModal(true)
   const closeModal = () => setIsModal(false)
@@ -73,7 +88,7 @@ function Channels() {
           ({channels.length}) <Icon name="add" className="cursor-pointer" onClick={openModal} />
         </Menu.Item>
 
-        {/* {DisplayChannels([
+        {/* {DisplayChannels(activeChannelState, [
           {
             id: 'sports',
             name: 'sports',
@@ -93,7 +108,7 @@ function Channels() {
             },
           },
         ])} */}
-        {DisplayChannels(channels)}
+        {DisplayChannels(activeChannelState, channels)}
       </Menu.Menu>
 
       <Modal basic open={isModal} onClose={closeModal}>
