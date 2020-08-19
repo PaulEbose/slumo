@@ -20,41 +20,38 @@ function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <Router>
-        <Suspense fallback={'Spinner...loading spinner'}>
-          <SiteHeader />
-        </Suspense>
+        <Switch>
+          <Route exact path="/" component={Home} />
 
-        <main className="p-5">
-          <Switch>
-            <Route exact path="/" component={Home} />
+          <Route path="/dashboard">
+            <SuspenseWithPerf
+              fallback={'Spinner...loading dashboard wit spinners and lines'}
+              traceId="loading-dashboard"
+            >
+              <AuthCheck fallback={'mini dashboard wit log in prompt'}>
+                <Dashboard />
+              </AuthCheck>
+            </SuspenseWithPerf>
+          </Route>
 
-            <Route path="/dashboard">
-              <SuspenseWithPerf
-                fallback={'Spinner...loading dashboard wit spinners and lines'}
-                traceId="loading-dashboard"
-              >
-                <AuthCheck fallback={'mini dashboard wit log in prompt'}>
-                  <Dashboard />
-                </AuthCheck>
-              </SuspenseWithPerf>
-            </Route>
+          <Route path="/login">
+            <Suspense fallback={'Spinner...loading spinner'}>
+              <SiteHeader />
+              <Login />
+              <SiteFooter />
+            </Suspense>
+          </Route>
 
-            <Route path="/login">
-              <Suspense fallback={'Spinner...loading spinner'}>
-                <Login />
-              </Suspense>
-            </Route>
+          <Route path="/register">
+            <Suspense fallback={'Spinner...loading spinner'}>
+              <SiteHeader />
+              <Register />
+              <SiteFooter />
+            </Suspense>
+          </Route>
 
-            <Route path="/register">
-              <Suspense fallback={'Spinner...loading spinner'}>
-                <Register />
-              </Suspense>
-            </Route>
-
-            <Route component={Fallback} />
-          </Switch>
-        </main>
-        <SiteFooter />
+          <Route component={Fallback} />
+        </Switch>
       </Router>
     </FirebaseAppProvider>
   )
