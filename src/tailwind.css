@@ -4,3 +4,23 @@
 .bg-main {
   background: #422f42;
 }
+
+.ml-70 {
+  margin-left: 20rem !important;
+}
+
+html, body, #root {
+  height: 100vh;
+}
+
+.h-75 {
+  height: 72%;
+}
+
+.message-form{
+  position:fixed !important;
+  left: 0;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 300;
+}

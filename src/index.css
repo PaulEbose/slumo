@@ -3,6 +3,23 @@
 .container {
   width: 100%
 }
+.h-75 {
+  height: 72%;
+}
+.message-form{
+  position:fixed !important;
+  left: 0;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 300;
+}
+html, body, #root {
+  height: 100vh;
+}
+
+.ml-70 {
+  margin-left: 20rem !important;
+}
 
 .bg-main {
   background: #422f42 !important;

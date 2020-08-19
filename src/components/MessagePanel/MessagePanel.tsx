@@ -1,11 +1,20 @@
 import React from 'react'
+import { Comment, Segment } from 'semantic-ui-react'
+import MessageForm from './MessageForm'
+import MessagesHeader from './MessagesHeader'
 
-function Messages() {
+function MessagePanel() {
   return (
-    <div>
-      Messages
-    </div>
+    <>
+      <MessagesHeader />
+
+      <Segment>
+        <Comment.Group className="overflow-y-scroll h-75"></Comment.Group>
+      </Segment>
+
+      <MessageForm />
+    </>
   )
 }
 
-export default Messages
+export default MessagePanel
