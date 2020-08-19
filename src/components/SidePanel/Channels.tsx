@@ -1,17 +1,31 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react'
-import { Menu, Icon, Modal, Form, Input, Button } from 'semantic-ui-react'
-import { checkFields } from '../../helpers/formHelper'
-import { useFirestore } from 'reactfire/firebaseApp/sdk'
-import { useUser } from 'reactfire/auth'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { User } from 'firebase'
+import { useUser } from 'reactfire'
+import { useFirestore } from 'reactfire/firebaseApp/sdk'
+
+import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
+import { checkFields } from '../../helpers/form'
+import { DisplayChannels } from '../../helpers/channel'
 
 function Channels() {
-  const firestore = useFirestore()
+  const channelsCollection = useFirestore().collection('channels')
   const user = useUser<User>()
+
+  useEffect(() => {
+    const unsubscribe = channelsCollection.onSnapshot((snapshot) => {
+      const updates = snapshot.docChanges().map((channel) => ({ ...channel.doc.data(), id: channel.doc.id }))
+
+      setChannels((c: any) => [...c, ...updates])
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  })
 
   const [channelName, setChannelName] = useState('')
   const [channelDetails, setChannelDetails] = useState('')
-  const [channels, setChannels] = useState([])
+  const [channels, setChannels] = useState<any>([])
   const [isModal, setIsModal] = useState(false)
 
   const openModal = () => setIsModal(true)
@@ -30,7 +44,7 @@ function Channels() {
     if (!isValid) return
 
     try {
-      await firestore.collection('channels').add({
+      await channelsCollection.add({
         name: channelName,
         about: channelDetails,
         createdBy: {
@@ -58,6 +72,28 @@ function Channels() {
           </span>{' '}
           ({channels.length}) <Icon name="add" className="cursor-pointer" onClick={openModal} />
         </Menu.Item>
+
+        {/* {DisplayChannels([
+          {
+            id: 'sports',
+            name: 'sports',
+            about: 'string',
+            createdBy: {
+              username: 'string',
+              avatar: 'string',
+            },
+          },
+          {
+            id: 'music',
+            name: 'music',
+            about: 'string',
+            createdBy: {
+              username: 'string',
+              avatar: 'string',
+            },
+          },
+        ])} */}
+        {DisplayChannels(channels)}
       </Menu.Menu>
 
       <Modal basic open={isModal} onClose={closeModal}>
