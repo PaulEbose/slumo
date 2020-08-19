@@ -8,7 +8,7 @@ function Dashboard() {
   console.log({ user })
 
   return (
-    <Grid columns="equal" className="bg-gray-300">
+    <Grid columns="equal" className="bg-gray-100 min-h-screen">
       <ColorPanel />
       <SidePanel />
 
