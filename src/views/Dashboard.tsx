@@ -12,11 +12,11 @@ function Dashboard() {
       <ColorPanel />
       <SidePanel />
 
-      <Grid.Column className="ml-40">
+      <Grid.Column className="ml-70 mt-2">
         <MessagePanel />
       </Grid.Column>
 
-      <Grid.Column width={4}>
+      <Grid.Column width={4} className="mt-2">
         <MetaPanel />
       </Grid.Column>
     </Grid>

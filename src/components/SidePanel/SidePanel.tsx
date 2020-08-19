@@ -6,7 +6,7 @@ import { ChannelProvider } from '../../contexts/Channel'
 
 function SidePanel() {
   return (
-    <Menu inverted vertical fixed="left" className="bg-main text-xl">
+    <Menu inverted vertical fixed="left" className="bg-main">
       <UserMenu />
       <ChannelProvider>
         <Channels />
