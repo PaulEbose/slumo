@@ -10,7 +10,7 @@ function MessagesHeader() {
 
   return (
     <Segment clearing>
-      <Header fluid floated="left" as="h2" style={{ marginBottom: 0 }}>
+      <Header fluid="true" floated="left" as="h2" style={{ marginBottom: 0 }}>
         <span>
           Channel
           <Icon name="star outline" color="black" />
@@ -24,7 +24,7 @@ function MessagesHeader() {
           id="searchTerm"
           icon="search"
           placeholder="Search Messages"
-          ariaLabel="Search Messages"
+          aria-label="Search Messages"
           onChange={handleChange}
         />
       </Header>

@@ -62,6 +62,7 @@ function Login({ history }: RouteChildrenProps) {
               value={email}
               autoComplete="email"
               placeholder="Email Address"
+              aria-label="Email Address"
               onChange={handleChange}
             />
 
@@ -76,6 +77,7 @@ function Login({ history }: RouteChildrenProps) {
               value={password}
               autoComplete="new-password"
               placeholder="Password"
+              aria-label="Password"
               onChange={handleChange}
             />
 

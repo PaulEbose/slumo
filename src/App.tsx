@@ -19,20 +19,20 @@ const firebaseConfig = {
 function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <Router>
-        <Switch>
-          <Route path="/dashboard">
-            <SuspenseWithPerf
-              fallback={'Spinner...loading dashboard wit spinners and lines'}
-              traceId="loading-dashboard"
-            >
-              <AuthCheck fallback={'mini dashboard wit log in prompt'}>
-                <Dashboard />
-              </AuthCheck>
-            </SuspenseWithPerf>
-          </Route>
+      <PageWrapper>
+        <Router>
+          <Switch>
+            <Route path="/dashboard">
+              <SuspenseWithPerf
+                fallback={'Spinner...loading dashboard wit spinners and lines'}
+                traceId="loading-dashboard"
+              >
+                <AuthCheck fallback={'mini dashboard wit log in prompt'}>
+                  <Dashboard />
+                </AuthCheck>
+              </SuspenseWithPerf>
+            </Route>
 
-          <PageWrapper>
             <Route exact path="/" component={Home} />
 
             <Route path="/login">
@@ -52,9 +52,9 @@ function App() {
             </Route>
 
             <Route component={Fallback} />
-          </PageWrapper>
-        </Switch>
-      </Router>
+          </Switch>
+        </Router>
+      </PageWrapper>
     </FirebaseAppProvider>
   )
 }

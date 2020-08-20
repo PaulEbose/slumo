@@ -71,6 +71,7 @@ function Register({ history }: RouteChildrenProps) {
               value={username}
               autoComplete="username"
               placeholder="Username"
+              aria-label="Username"
               onChange={handleChange}
             />
 
@@ -85,6 +86,7 @@ function Register({ history }: RouteChildrenProps) {
               value={email}
               autoComplete="email"
               placeholder="Email Address"
+              aria-label="Email Address"
               onChange={handleChange}
             />
 
@@ -99,6 +101,7 @@ function Register({ history }: RouteChildrenProps) {
               value={password}
               autoComplete="new-password"
               placeholder="Password"
+              aria-label="Password"
               onChange={handleChange}
             />
 
@@ -113,6 +116,7 @@ function Register({ history }: RouteChildrenProps) {
               value={confirmPassword}
               autoComplete="new-password"
               placeholder="Confirm Password"
+              aria-label="Confirm Password"
               onChange={handleChange}
             />
 
