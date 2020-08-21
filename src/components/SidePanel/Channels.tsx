@@ -7,12 +7,12 @@ import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
 import { checkFields } from '../../helpers/form'
 import { DisplayChannels } from '../../helpers/channel'
 import { IChannel } from '../../types/Channels'
-import { ChannelContext } from '../../contexts/Channel'
+import { useActiveChannel } from '../../contexts/Channel'
 
 function Channels() {
   const channelsCollection = useFirestore().collection('channels')
   const user = useUser<User>()
-  const [, setChannel] = useContext(ChannelContext)
+  const activeChannel = useActiveChannel()
 
   useEffect(() => {
     const unsubscribe = channelsCollection.onSnapshot((snapshot) => {
@@ -21,11 +21,10 @@ function Channels() {
       setChannels((c: any) => [...c, ...updates])
 
       const firstChannel = channels[0]
-      const setActiveChannel = activeChannelState[1]
+      const setActiveChannel = activeChannel[1]
 
       if (isFirstLoad && !!channels.length) {
-        setChannel!(firstChannel)
-        setActiveChannel(firstChannel.id)
+        setActiveChannel(firstChannel)
       }
 
       setIsFirstLoad(false)
@@ -41,7 +40,6 @@ function Channels() {
   const [channels, setChannels] = useState<IChannel[]>([])
   const [isModal, setIsModal] = useState(false)
   const [isFirstLoad, setIsFirstLoad] = useState(true)
-  const activeChannelState = useState<string | null>(null)
 
   const openModal = () => setIsModal(true)
   const closeModal = () => setIsModal(false)
@@ -108,7 +106,7 @@ function Channels() {
             },
           },
         ])} */}
-        {DisplayChannels(activeChannelState, channels)}
+        {DisplayChannels(activeChannel, channels)}
       </Menu.Menu>
 
       <Modal basic open={isModal} onClose={closeModal}>

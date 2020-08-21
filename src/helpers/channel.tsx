@@ -1,18 +1,14 @@
-import React, { useContext, Dispatch, SetStateAction } from 'react'
+import React from 'react'
 import { Menu } from 'semantic-ui-react'
-import { ChannelContext } from '../contexts/Channel'
-import { IChannel } from '../types/Channels'
+import { ActiveChannelDispatch, ActiveChannelState, IChannel } from '../types/Channels'
 
-type ActiveChannel = [string | null, Dispatch<SetStateAction<string | null>>]
+type ActiveChannel = readonly [ActiveChannelState, ActiveChannelDispatch]
 
-export function DisplayChannels(activeChannelState: ActiveChannel, channels: IChannel[]) {
-  const [c, setChannel] = useContext(ChannelContext)
-  const [activeChannel, setActiveChannel] = activeChannelState
+export function DisplayChannels(activeChannel: ActiveChannel, channels: IChannel[]) {
+  const [channelActive, setActiveChannel] = activeChannel
 
   const changeChannel = (channel: IChannel) => {
-    setChannel!(channel)
-    setActiveChannel(channel.id)
-    console.log('channel changed', c)
+    setActiveChannel && setActiveChannel(channel)
   }
 
   return (
@@ -22,7 +18,7 @@ export function DisplayChannels(activeChannelState: ActiveChannel, channels: ICh
         key={channel.id}
         name={channel.name}
         className="capitalize opacity-75"
-        active={channel.id === activeChannel}
+        active={channel.id === channelActive?.id}
         onClick={() => changeChannel(channel)}
       >
         # {channel.name}

@@ -1,16 +1,13 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
-import UserMenu from './UserMenu'
 import Channels from './Channels'
-import { ChannelProvider } from '../../contexts/Channel'
+import UserMenu from './UserMenu'
 
 function SidePanel() {
   return (
     <Menu inverted vertical fixed="left" className="bg-main">
       <UserMenu />
-      <ChannelProvider>
-        <Channels />
-      </ChannelProvider>
+      <Channels />
     </Menu>
   )
 }
