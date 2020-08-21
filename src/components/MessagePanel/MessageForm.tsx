@@ -15,7 +15,13 @@ function MessageForm() {
       />
 
       <Button.Group icon widths="2">
-        <Button color="orange" icon="edit" labelPosition="left" content="Add Reply" onClick={sendMessage} />
+        <Button
+          color="orange"
+          icon="edit"
+          labelPosition="left"
+          content="Add Reply"
+          onClick={() => console.log('clicked oh!')}
+        />
         <Button color="teal" icon="cloud upload" labelPosition="right" content="Upload Media" />
       </Button.Group>
     </Segment>

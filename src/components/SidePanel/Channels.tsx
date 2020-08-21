@@ -1,18 +1,25 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from 'react'
 import { User } from 'firebase'
-import { useUser } from 'reactfire'
-import { useFirestore } from 'reactfire/firebaseApp/sdk'
+import { useUser, useFirestore } from 'reactfire'
 
 import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
 import { checkFields } from '../../helpers/form'
-import { DisplayChannels } from '../../helpers/channel'
+import { ActiveChannelDispatchContext, ActiveChannelStateContext } from '../../contexts/Channel'
 import { IChannel } from '../../types/Channels'
-import { useActiveChannel } from '../../contexts/Channel'
 
 function Channels() {
   const channelsCollection = useFirestore().collection('channels')
   const user = useUser<User>()
-  const activeChannel = useActiveChannel()
+  const [activeChannel, setActiveChannel] = [
+    useContext(ActiveChannelStateContext),
+    useContext(ActiveChannelDispatchContext),
+  ]
+
+  const [channelName, setChannelName] = useState('')
+  const [channelDetails, setChannelDetails] = useState('')
+  const [channels, setChannels] = useState<IChannel[]>([])
+  const [isModal, setIsModal] = useState(false)
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
 
   useEffect(() => {
     const unsubscribe = channelsCollection.onSnapshot((snapshot) => {
@@ -21,25 +28,17 @@ function Channels() {
       setChannels((c: any) => [...c, ...updates])
 
       const firstChannel = channels[0]
-      const setActiveChannel = activeChannel[1]
 
       if (isFirstLoad && !!channels.length) {
-        setActiveChannel(firstChannel)
+        setActiveChannel && setActiveChannel(firstChannel)
+        setIsFirstLoad(false)
       }
-
-      setIsFirstLoad(false)
     })
 
     return () => {
       unsubscribe()
     }
-  })
-
-  const [channelName, setChannelName] = useState('')
-  const [channelDetails, setChannelDetails] = useState('')
-  const [channels, setChannels] = useState<IChannel[]>([])
-  const [isModal, setIsModal] = useState(false)
-  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  }, [channels, channelsCollection, isFirstLoad, setActiveChannel])
 
   const openModal = () => setIsModal(true)
   const closeModal = () => setIsModal(false)
@@ -86,27 +85,18 @@ function Channels() {
           ({channels.length}) <Icon name="add" className="cursor-pointer" onClick={openModal} />
         </Menu.Item>
 
-        {/* {DisplayChannels(activeChannelState, [
-          {
-            id: 'sports',
-            name: 'sports',
-            about: 'string',
-            createdBy: {
-              username: 'string',
-              avatar: 'string',
-            },
-          },
-          {
-            id: 'music',
-            name: 'music',
-            about: 'string',
-            createdBy: {
-              username: 'string',
-              avatar: 'string',
-            },
-          },
-        ])} */}
-        {DisplayChannels(activeChannel, channels)}
+        {!!channels.length &&
+          channels.map((channel) => (
+            <Menu.Item
+              key={channel.id}
+              name={channel.name}
+              className="capitalize opacity-75"
+              active={channel.id === activeChannel?.id}
+              onClick={() => setActiveChannel && setActiveChannel(channel)}
+            >
+              # {channel.name}
+            </Menu.Item>
+          ))}
       </Menu.Menu>
 
       <Modal basic open={isModal} onClose={closeModal}>
