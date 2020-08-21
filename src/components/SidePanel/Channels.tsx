@@ -5,40 +5,26 @@ import { useUser, useFirestore } from 'reactfire'
 import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
 import { checkFields } from '../../helpers/form'
 import { ActiveChannelDispatchContext, ActiveChannelStateContext } from '../../contexts/Channel'
-import { IChannel } from '../../types/Channels'
+import { ChannelsContext } from '../../contexts/Channels'
 
 function Channels() {
   const channelsCollection = useFirestore().collection('channels')
   const user = useUser<User>()
-  const [activeChannel, setActiveChannel] = [
-    useContext(ActiveChannelStateContext),
-    useContext(ActiveChannelDispatchContext),
-  ]
-
+  const activeChannel = useContext(ActiveChannelStateContext)
+  const setActiveChannel = useContext(ActiveChannelDispatchContext)
+  const channels = useContext(ChannelsContext)
   const [channelName, setChannelName] = useState('')
   const [channelDetails, setChannelDetails] = useState('')
-  const [channels, setChannels] = useState<IChannel[]>([])
   const [isModal, setIsModal] = useState(false)
   const [isFirstLoad, setIsFirstLoad] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = channelsCollection.onSnapshot((snapshot) => {
-      const updates = snapshot.docChanges().map((channel) => ({ ...channel.doc.data(), id: channel.doc.id }))
+    if (!isFirstLoad && !channels.length) return
 
-      setChannels((c: any) => [...c, ...updates])
-
-      const firstChannel = channels[0]
-
-      if (isFirstLoad && !!channels.length) {
-        setActiveChannel && setActiveChannel(firstChannel)
-        setIsFirstLoad(false)
-      }
-    })
-
-    return () => {
-      unsubscribe()
-    }
-  }, [channels, channelsCollection, isFirstLoad, setActiveChannel])
+    const firstChannel = channels[0]
+    setActiveChannel && setActiveChannel(firstChannel)
+    setIsFirstLoad(false)
+  }, [channels, isFirstLoad, setActiveChannel])
 
   const openModal = () => setIsModal(true)
   const closeModal = () => setIsModal(false)
@@ -50,13 +36,16 @@ function Channels() {
 
   const handleSubmit = async (ev: FormEvent | MouseEvent) => {
     ev.preventDefault()
-
     const [isValid] = checkFields(channelName, channelDetails)
-
     if (!isValid) return
 
+    if (!channelsCollection) return
+    // TODO: show connection error in the UI
+
     try {
-      await channelsCollection.add({
+      const ch = channelsCollection.doc()
+      await ch.update({
+        id: ch.id,
         name: channelName,
         about: channelDetails,
         createdBy: {

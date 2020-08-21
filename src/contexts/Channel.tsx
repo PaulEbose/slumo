@@ -4,13 +4,13 @@ import { ActiveChannelDispatch, ActiveChannelState } from '../types/Channels'
 const ActiveChannelStateContext = createContext<ActiveChannelState>(null)
 const ActiveChannelDispatchContext = createContext<ActiveChannelDispatch>(undefined)
 
-function ChannelProvider(props?: PropsWithChildren<{}>) {
-  const [activeChannel, setActiveChannel] = useState<ActiveChannelState>(undefined)
+function ChannelProvider(props: PropsWithChildren<{}>) {
+  const [activeChannel, setActiveChannel] = useState<ActiveChannelState>(null)
 
   return (
     <ActiveChannelStateContext.Provider value={activeChannel}>
       <ActiveChannelDispatchContext.Provider value={setActiveChannel}>
-        {props?.children}
+        {props.children}
       </ActiveChannelDispatchContext.Provider>
     </ActiveChannelStateContext.Provider>
   )

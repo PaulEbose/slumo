@@ -11,6 +11,6 @@ export interface IChannel extends firestore.DocumentData {
   }
 }
 
-export type ActiveChannelDispatch = Dispatch<SetStateAction<IChannel | null | undefined>> | undefined
+export type ActiveChannelDispatch = Dispatch<SetStateAction<IChannel | null>> | undefined
 
-export type ActiveChannelState = IChannel | null | undefined
+export type ActiveChannelState = IChannel | null
