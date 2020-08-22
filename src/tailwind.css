@@ -17,10 +17,19 @@ html, body, #root {
   height: 72%;
 }
 
-.message-form{
-  position:fixed !important;
+.message-form {
+  position: fixed !important;
   left: 0;
   bottom: 1rem;
   right: 1rem;
   z-index: 300;
+}
+
+.message-self {
+  border-left: 2.5px solid #1a202c;
+  padding-left: 8px;
+}
+
+.message-avatar img {
+  height: auto !important;
 }

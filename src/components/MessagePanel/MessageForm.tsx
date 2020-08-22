@@ -27,19 +27,21 @@ function MessageForm() {
     }
 
     setIsLoading(true)
-    const newMessage: Message = {
-      text: message,
-      timestamp: new firestore.Timestamp(Date.now() / 1000, 2),
-      user: {
-        id: user.uid,
-        name: user.displayName!,
-        avatar: user.photoURL!,
-      },
-    }
 
     try {
       const messagesCollection = channelsCollection.doc(activeChannel?.id).collection('messages')
-      await messagesCollection.add(newMessage)
+      const newMessage = messagesCollection.doc()
+      await messagesCollection.add({
+        id: newMessage.id,
+        text: message,
+        timestamp: new firestore.Timestamp(Date.now() / 1000, 2),
+        user: {
+          id: user.uid,
+          name: user.displayName!,
+          avatar: user.photoURL!,
+        },
+      })
+
       console.log('added')
     } catch (error) {
       setErrors([error])

@@ -1,5 +1,12 @@
 /* @tailwind base; */
 
+.message-self {
+  border-left: 2.5px solid #1a202c;
+  padding-left: 8px;
+}
+.message-avatar img {
+  height: auto !important;
+}
 .container {
   width: 100%
 }

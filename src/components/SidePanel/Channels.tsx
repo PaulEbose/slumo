@@ -17,6 +17,7 @@ function Channels() {
   const [channelDetails, setChannelDetails] = useState('')
   const [isModal, setIsModal] = useState(false)
   const [isFirstLoad, setIsFirstLoad] = useState(true)
+  const [isCreating, setIsCreating] = useState(false)
 
   useEffect(() => {
     if (!isFirstLoad && !channels.length) return
@@ -41,6 +42,7 @@ function Channels() {
 
     if (!channelsCollection) return
     // TODO: show connection error in the UI
+    setIsCreating(true)
 
     try {
       const ch = channelsCollection.doc()
@@ -57,6 +59,7 @@ function Channels() {
       setChannelName('')
       setChannelDetails('')
       closeModal()
+      setIsCreating(false)
     } catch (error) {
       console.error(error)
     }
@@ -104,7 +107,7 @@ function Channels() {
         </Modal.Content>
 
         <Modal.Actions>
-          <Button inverted color="green" onClick={handleSubmit}>
+          <Button inverted loading={isCreating} color="green" onClick={handleSubmit}>
             <Icon name="checkmark" /> Add
           </Button>
 
