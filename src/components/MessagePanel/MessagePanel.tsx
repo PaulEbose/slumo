@@ -1,5 +1,5 @@
 import { User } from 'firebase/app'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useFirestore, useFirestoreCollectionData, useUser } from 'reactfire'
 import { Comment, Segment } from 'semantic-ui-react'
 import { ActiveChannelStateContext } from '../../contexts/ActiveChannel'
@@ -12,19 +12,16 @@ function MessagePanel() {
   const channelsCollection = useFirestore().collection('channels')
   const user = useUser<User>()
   const activeChannel = useContext(ActiveChannelStateContext)
-  const [isMsgCollectionLoaded, setIsMsgCollectionLoaded] = useState(false)
   const [messagesCollection, setMessagesCollection] = useState(
     channelsCollection.doc('tempMsgCollection').collection('messages')
   )
 
-  if (!isMsgCollectionLoaded && activeChannel) {
-    setMessagesCollection(channelsCollection.doc(activeChannel.id).collection('messages'))
-    setIsMsgCollectionLoaded(true)
-  }
-  const messages = useFirestoreCollectionData<Message>(messagesCollection, { startWithValue: [] })
+  useEffect(() => {
+    activeChannel && setMessagesCollection(channelsCollection.doc(activeChannel.id).collection('messages'))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeChannel])
 
-  console.log({ messagesCollection })
-  console.log({ messages })
+  const messages = useFirestoreCollectionData<Message>(messagesCollection, { startWithValue: [] })
 
   return (
     <>

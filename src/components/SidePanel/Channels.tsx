@@ -46,7 +46,7 @@ function Channels() {
 
     try {
       const ch = channelsCollection.doc()
-      await ch.update({
+      await ch.set({
         id: ch.id,
         name: channelName,
         about: channelDetails,

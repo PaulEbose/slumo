@@ -6,7 +6,6 @@ import { Button, Input, Segment } from 'semantic-ui-react'
 import { ActiveChannelStateContext } from '../../contexts/ActiveChannel'
 import { checkFields, displayErrorInput } from '../../helpers/form'
 import { FormError } from '../../types/Forms'
-import { Message } from '../../types/Messages'
 
 function MessageForm() {
   const user = useUser<User>()
