@@ -1,6 +1,6 @@
 export type Message = {
   text: string
-  timestamp: number
+  timestamp: object
   user: {
     id: string
     name: string

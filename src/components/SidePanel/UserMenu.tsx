@@ -1,5 +1,5 @@
 import React from 'react'
-import { User } from 'firebase'
+import { User } from 'firebase/app'
 import { useUser } from 'reactfire/auth'
 import { useAuth } from 'reactfire/firebaseApp/sdk'
 import { Dropdown, DropdownItemProps, Grid, Header, Icon, Image } from 'semantic-ui-react'

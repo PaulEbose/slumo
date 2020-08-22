@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from 'react'
-import { User } from 'firebase'
+import { User } from 'firebase/app'
 import { useUser, useFirestore } from 'reactfire'
 
 import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
