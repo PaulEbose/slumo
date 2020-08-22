@@ -4,7 +4,7 @@ import { Grid } from 'semantic-ui-react'
 import { ColorPanel, MessagePanel, MetaPanel, SidePanel } from '../components'
 import { ChannelsProvider } from '../contexts/Channels'
 import { preloadFirestore } from 'reactfire/firebaseApp/sdk'
-import { ChannelProvider } from '../contexts/Channel'
+import { ChannelProvider } from '../contexts/ActiveChannel'
 
 function Dashboard() {
   const user = useUser()

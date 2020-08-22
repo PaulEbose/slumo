@@ -4,7 +4,7 @@ import { useUser, useFirestore } from 'reactfire'
 
 import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
 import { checkFields } from '../../helpers/form'
-import { ActiveChannelDispatchContext, ActiveChannelStateContext } from '../../contexts/Channel'
+import { ActiveChannelDispatchContext, ActiveChannelStateContext } from '../../contexts/ActiveChannel'
 import { ChannelsContext } from '../../contexts/Channels'
 
 function Channels() {

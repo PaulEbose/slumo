@@ -1,7 +1,6 @@
-import { firestore } from 'firebase'
 import { Dispatch, SetStateAction } from 'react'
 
-export interface IChannel extends firestore.DocumentData {
+export interface IChannel {
   id: string
   name: string
   about: string
