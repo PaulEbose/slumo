@@ -1,8 +1,8 @@
 import { createElement } from 'react'
 import { FormError, FormHelperMethod, RegisterForm } from '../types/Forms'
 
-export const displayErrorInput = (errors: FormError[], inputName: string) =>
-  errors.some((error) => error.message.toLowerCase().includes(inputName)) ? 'error' : ''
+export const displayErrorInput = (errors: FormError[], inputName: string, className = 'error') =>
+  errors.some((error) => error.message.toLowerCase().includes(inputName)) ? className : ''
 
 export const displayFormErrors = (errors: FormError[]) =>
   errors.map((error, idx) => createElement('p', { key: idx }, error.message))
@@ -87,4 +87,8 @@ export function validatePassword(password: string, confirmPassword?: string): Fo
   }
 
   return [true, []]
+}
+
+export function checkImages(files: File[], fileTypes: string[]) {
+  return files.filter((file) => fileTypes.includes(file.type))
 }
