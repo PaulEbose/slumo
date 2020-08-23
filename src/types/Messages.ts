@@ -1,6 +1,7 @@
 export type Message = {
   id: string
-  text: string
+  fileUrl?: string
+  text?: string
   timestamp: firebase.firestore.Timestamp
   user: {
     id: string

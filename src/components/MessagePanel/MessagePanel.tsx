@@ -1,9 +1,9 @@
 import { User } from 'firebase/app'
 import React, { useContext, useEffect, useState } from 'react'
 import { useFirestore, useFirestoreCollectionData, useUser } from 'reactfire'
-import { Comment, Segment } from 'semantic-ui-react'
+import { Comment, Segment, Image } from 'semantic-ui-react'
 import { ActiveChannelStateContext } from '../../contexts/ActiveChannel'
-import { isOwnMessage, timeFromNow } from '../../helpers/message'
+import { isOwnMessage, timeFromNow, isImage } from '../../helpers/message'
 import { Message } from '../../types/Messages'
 import MessageForm from './MessageForm'
 import MessagesHeader from './MessagesHeader'
@@ -18,7 +18,7 @@ function MessagePanel() {
 
   useEffect(() => {
     activeChannel && setMessagesCollection(channelsCollection.doc(activeChannel.id).collection('messages'))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeChannel])
 
   const messages = useFirestoreCollectionData<Message>(messagesCollection, { startWithValue: [] })
@@ -36,7 +36,11 @@ function MessagePanel() {
                 <Comment.Content className={isOwnMessage(message, user)}>
                   <Comment.Author as="a">{message.user.name}</Comment.Author>
                   <Comment.Metadata>{timeFromNow(message.timestamp)}</Comment.Metadata>
-                  <Comment.Text>{message.text}</Comment.Text>
+                  {isImage(message) ? (
+                    <Image src={message.fileUrl} className="p-3" />
+                  ) : (
+                    <Comment.Text>{message.text}</Comment.Text>
+                  )}
                 </Comment.Content>
               </Comment>
             ))}
