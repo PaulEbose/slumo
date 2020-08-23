@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ActiveChannelStateContext } from '../../contexts/ActiveChannel'
 import { checkFields, checkImages, displayErrorInput } from '../../helpers/form'
 import { FormError } from '../../types/Forms'
+import { Message } from '../../types/Messages'
 
 function MessageForm() {
   const user = useUser<User>()
@@ -15,7 +16,7 @@ function MessageForm() {
   const channelsCollection = useFirestore().collection('channels')
   const storage = useStorage()
   const [errors, setErrors] = useState<FormError[]>([])
-  const [message, setMessage] = useState('')
+  const [text, setText] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isModal, setIsModal] = useState(false)
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
@@ -30,11 +31,33 @@ function MessageForm() {
   }
 
   const handleChange = ({ target: { id, value } }: ChangeEvent<HTMLInputElement>) => {
-    id === 'message' && setMessage(value)
+    id === 'message' && setText(value)
   }
 
-  const sendMessage = async () => {
-    const [isValid] = checkFields(message)
+  const sendMessage = (fileUrl?: string) => {
+    const messagesCollection = channelsCollection.doc(activeChannel?.id).collection('messages')
+    const newMessageDoc = messagesCollection.doc()
+    const messageContent: Message = {
+      id: newMessageDoc.id,
+      timestamp: new firestore.Timestamp(Date.now() / 1000, 2),
+      user: {
+        id: user.uid,
+        name: user.displayName!,
+        avatar: user.photoURL!,
+      },
+    }
+
+    if (fileUrl) {
+      messageContent.fileUrl = fileUrl
+    } else {
+      messageContent.text = text
+    }
+
+    return messagesCollection.add(messageContent)
+  }
+
+  const sendTextMessage = async () => {
+    const [isValid] = checkFields(text)
     if (!isValid) {
       return setErrors([{ message: 'Add a message' }])
     }
@@ -42,32 +65,18 @@ function MessageForm() {
     setIsLoading(true)
 
     try {
-      const messagesCollection = channelsCollection.doc(activeChannel?.id).collection('messages')
-      const newMessage = messagesCollection.doc()
-      await messagesCollection.add({
-        id: newMessage.id,
-        text: message,
-        timestamp: new firestore.Timestamp(Date.now() / 1000, 2),
-        user: {
-          id: user.uid,
-          name: user.displayName!,
-          avatar: user.photoURL!,
-        },
-      })
-
-      console.log('added')
+      await sendMessage()
     } catch (error) {
       setErrors([error])
       console.error(error)
     }
 
     setIsLoading(false)
-    setMessage('')
+    setText('')
   }
 
   const addFile = ({ target: { files } }: ChangeEvent<HTMLInputElement>) => {
     if (!files?.length) return
-
     setFilesToUpload(Array.from(files))
     setErrors([])
   }
@@ -106,21 +115,9 @@ function MessageForm() {
 
     setIsLoading(true)
 
-    const downloadUrl = await uploadFile(validFiles[0])
-
     try {
-      const messagesCollection = channelsCollection.doc(activeChannel?.id).collection('messages')
-      const newMessage = messagesCollection.doc()
-      await messagesCollection.add({
-        id: newMessage.id,
-        fileUrl: downloadUrl,
-        timestamp: new firestore.Timestamp(Date.now() / 1000, 2),
-        user: {
-          id: user.uid,
-          name: user.displayName!,
-          avatar: user.photoURL!,
-        },
-      })
+      const downloadUrl = await uploadFile(validFiles[0])
+      await sendMessage(downloadUrl)
       setUploadState('done')
     } catch (error) {
       setUploadState('error')
@@ -145,7 +142,7 @@ function MessageForm() {
           placeholder="Write a message"
           aria-label="Write a message"
           onChange={handleChange}
-          value={message}
+          value={text}
         />
 
         <Button.Group icon widths="2">
@@ -154,7 +151,7 @@ function MessageForm() {
             icon="edit"
             labelPosition="left"
             content="Add Reply"
-            onClick={sendMessage}
+            onClick={sendTextMessage}
             disabled={isLoading}
           />
           <Button color="teal" icon="cloud upload" labelPosition="right" content="Upload Media" onClick={openModal} />

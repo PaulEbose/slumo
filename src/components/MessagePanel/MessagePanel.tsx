@@ -1,9 +1,9 @@
 import { User } from 'firebase/app'
 import React, { useContext, useEffect, useState } from 'react'
 import { useFirestore, useFirestoreCollectionData, useUser } from 'reactfire'
-import { Comment, Segment, Image } from 'semantic-ui-react'
+import { Comment, Image, Segment } from 'semantic-ui-react'
 import { ActiveChannelStateContext } from '../../contexts/ActiveChannel'
-import { isOwnMessage, timeFromNow, isImage } from '../../helpers/message'
+import { isImage, isOwnMessage, timeFromNow } from '../../helpers/message'
 import { Message } from '../../types/Messages'
 import MessageForm from './MessageForm'
 import MessagesHeader from './MessagesHeader'
@@ -21,7 +21,7 @@ function MessagePanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeChannel])
 
-  const messages = useFirestoreCollectionData<Message>(messagesCollection, { startWithValue: [] })
+  const messages = useFirestoreCollectionData<Message>(messagesCollection.orderBy('timestamp'), { startWithValue: [] })
 
   return (
     <>

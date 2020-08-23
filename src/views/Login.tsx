@@ -2,13 +2,11 @@ import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { Link, RouteChildrenProps, withRouter } from 'react-router-dom'
 import { useAuth } from 'reactfire/firebaseApp/sdk'
 import { Button, Form, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react'
-
 import { checkFields, displayErrorInput, displayFormErrors } from '../helpers/form'
 import { FormError } from '../types/Forms'
 
 function Login({ history }: RouteChildrenProps) {
   const auth = useAuth()
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginFormErrors, setLoginFormErrors] = useState<FormError[]>([])
@@ -21,8 +19,6 @@ function Login({ history }: RouteChildrenProps) {
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    setLoginFormErrors([])
-
     const [isValid, errors] = checkFields(email, password)
 
     if (!isValid) {

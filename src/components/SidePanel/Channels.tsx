@@ -1,11 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from 'react'
 import { User } from 'firebase/app'
-import { useUser, useFirestore } from 'reactfire'
-
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react'
+import { useFirestore, useUser } from 'reactfire'
 import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react'
-import { checkFields } from '../../helpers/form'
 import { ActiveChannelDispatchContext, ActiveChannelStateContext } from '../../contexts/ActiveChannel'
 import { ChannelsContext } from '../../contexts/Channels'
+import { checkFields } from '../../helpers/form'
 
 function Channels() {
   const channelsCollection = useFirestore().collection('channels')
@@ -21,7 +20,6 @@ function Channels() {
 
   useEffect(() => {
     if (!isFirstLoad && !channels.length) return
-
     const firstChannel = channels[0]
     setActiveChannel && setActiveChannel(firstChannel)
     setIsFirstLoad(false)
@@ -39,7 +37,6 @@ function Channels() {
     ev.preventDefault()
     const [isValid] = checkFields(channelName, channelDetails)
     if (!isValid) return
-
     if (!channelsCollection) return
     // TODO: show connection error in the UI
     setIsCreating(true)
@@ -55,7 +52,6 @@ function Channels() {
           avatar: user.photoURL,
         },
       })
-
       setChannelName('')
       setChannelDetails('')
       closeModal()
@@ -63,7 +59,6 @@ function Channels() {
     } catch (error) {
       console.error(error)
     }
-
     // TODO: show success/error in the UI
   }
 

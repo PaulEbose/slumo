@@ -1,6 +1,6 @@
-import { Message } from '../types/Messages'
-import { User, firestore } from 'firebase'
+import { firestore, User } from 'firebase'
 import moment from 'moment'
+import { Message } from '../types/Messages'
 
 export const isOwnMessage = (message: Message, user: User) => (message.user.id === user.uid ? 'message-self' : '')
 

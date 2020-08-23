@@ -1,15 +1,11 @@
 import React from 'react'
-import { useUser } from 'reactfire/auth'
+import { preloadFirestore } from 'reactfire/firebaseApp/sdk'
 import { Grid } from 'semantic-ui-react'
 import { ColorPanel, MessagePanel, MetaPanel, SidePanel } from '../components'
-import { ChannelsProvider } from '../contexts/Channels'
-import { preloadFirestore } from 'reactfire/firebaseApp/sdk'
 import { ChannelProvider } from '../contexts/ActiveChannel'
+import { ChannelsProvider } from '../contexts/Channels'
 
 function Dashboard() {
-  const user = useUser()
-  console.log({ user })
-
   preloadFirestore({
     setup: (firestore) => firestore().enablePersistence(),
   })

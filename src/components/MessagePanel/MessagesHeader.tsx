@@ -26,6 +26,7 @@ function MessagesHeader() {
           placeholder="Search Messages"
           aria-label="Search Messages"
           onChange={handleChange}
+          value={searchTerm}
         />
       </Header>
     </Segment>

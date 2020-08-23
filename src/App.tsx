@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { AuthCheck, SuspenseWithPerf } from 'reactfire'
 import { FirebaseAppProvider } from 'reactfire/firebaseApp'
-import { SiteFooter, SiteHeader, PageWrapper } from './components'
+import { PageWrapper, SiteFooter, SiteHeader } from './components'
 import { Dashboard, Fallback, Home, Login, Register } from './views'
 
 const firebaseConfig = {
